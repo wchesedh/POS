@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Modules\Upload\Entities\Upload;
 use Modules\User\Rules\MatchCurrentPassword;
 
 class ProfileController extends Controller
@@ -30,19 +29,17 @@ class ProfileController extends Controller
         ]);
 
         if ($request->has('image')) {
-            if ($request->has('image')) {
-                $tempFile = Upload::where('folder', $request->image)->first();
+            // Delete old avatar
+            if (auth()->user()->getFirstMedia('avatars')) {
+                auth()->user()->getFirstMedia('avatars')->delete();
+            }
 
-                if (auth()->user()->getFirstMedia('avatars')) {
-                    auth()->user()->getFirstMedia('avatars')->delete();
-                }
-
-                if ($tempFile) {
-                    auth()->user()->addMedia(Storage::path('temp/' . $request->image . '/' . $tempFile->filename))->toMediaCollection('avatars');
-
-                    Storage::deleteDirectory('temp/' . $request->image);
-                    $tempFile->delete();
-                }
+            // Add new avatar from dropzone
+            $imagePath = Storage::path('temp/dropzone/' . $request->image);
+            if (file_exists($imagePath)) {
+                auth()->user()->addMedia($imagePath)->toMediaCollection('avatars');
+                // Clean up the temp file
+                Storage::delete('temp/dropzone/' . $request->image);
             }
         }
 

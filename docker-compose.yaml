@@ -1,6 +1,6 @@
 services:
   web:
-    image: triangle-pos:latest
+    image: kabsat-pos:latest
     build:
       context: .
     env_file:

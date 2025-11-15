@@ -16,13 +16,13 @@ class SettingDatabaseSeeder extends Seeder
     public function run()
     {
         Setting::create([
-            'company_name' => 'Triangle POS',
+            'company_name' => 'KABSAT POS',
             'company_email' => 'company@test.com',
             'company_phone' => '012345678901',
             'notification_email' => 'notification@test.com',
             'default_currency_id' => 1,
             'default_currency_position' => 'prefix',
-            'footer_text' => 'Triangle Pos © 2021',
+            'footer_text' => 'KABSAT POS © 2021',
             'company_address' => 'Tangail, Bangladesh'
         ]);
     }
